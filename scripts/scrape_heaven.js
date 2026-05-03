@@ -89,8 +89,8 @@ async function scrapeRange(range) {
 
 async function main() {
     let allProducts = [];
-    // Just scrape first 3 ranges for the demo to avoid getting blocked
-    for (const range of RANGES.slice(0, 5)) {
+    // Scrape all ranges
+    for (const range of RANGES) {
         const products = await scrapeRange(range);
         allProducts = [...allProducts, ...products];
         console.log(`Found ${products.length} items in range ${range}`);
