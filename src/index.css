@@ -1,0 +1,100 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Typography Tokens */
+    font-family: 'Outfit', sans-serif;
+    
+    /* Color Palette Tokens */
+    --color-bg-core: #09090b;
+    --color-bg-ambient: #1c1326;
+    --color-accent-primary: #ff477e;
+    --color-accent-secondary: #7e47ff;
+    
+    /* Gradient Tokens */
+    --gradient-bg: radial-gradient(circle at 50% 0%, var(--color-bg-ambient) 0%, var(--color-bg-core) 100%);
+    --gradient-accent: linear-gradient(135deg, var(--color-accent-primary), var(--color-accent-secondary));
+    
+    /* Glassmorphism Tokens */
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-bg-hover: rgba(255, 255, 255, 0.07);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-border-hover: rgba(255, 255, 255, 0.2);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    --glass-blur: blur(16px);
+    
+    /* Radius Tokens */
+    --radius-xl: 1.5rem;
+    
+    background-color: var(--color-bg-core);
+    color: white;
+  }
+  
+  body {
+    @apply min-h-screen;
+    background: var(--gradient-bg);
+    background-attachment: fixed;
+  }
+}
+
+@layer components {
+  /* Glassmorphism Surface Token Utility */
+  .glass-panel {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--glass-shadow);
+    @apply transition-all duration-300;
+  }
+
+  .glass-panel-hover:hover {
+    background: var(--glass-bg-hover);
+    border-color: var(--glass-border-hover);
+    transform: translateY(-6px);
+    box-shadow: 0 16px 40px 0 rgba(0, 0, 0, 0.5);
+  }
+
+  .checkbox-custom {
+    @apply absolute top-3 right-3 w-6 h-6 rounded-full border flex items-center justify-center cursor-pointer transition-all duration-200;
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    border-color: var(--glass-border);
+  }
+
+  .checkbox-custom.checked {
+    background: var(--gradient-accent);
+    border-color: transparent;
+    box-shadow: 0 0 15px var(--color-accent-primary);
+  }
+
+  .card-image-container {
+    @apply relative w-full aspect-square overflow-hidden rounded-t-[1.5rem];
+  }
+
+  .card-image {
+    @apply w-full h-full object-cover transition-transform duration-500;
+  }
+
+  .glass-panel-hover:hover .card-image {
+    @apply scale-105;
+  }
+
+  /* Modern Gradient Utilities */
+  .text-gradient {
+    background: var(--gradient-accent);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .bg-gradient-modern {
+    background: var(--gradient-accent);
+  }
+}
