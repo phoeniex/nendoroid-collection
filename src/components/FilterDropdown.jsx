@@ -61,7 +61,7 @@ export function FilterDropdown({ label, options, selected, onChange }) {
                 placeholder="Search..."
                 value={search}
                 onChange={e => setSearch(e.target.value)}
-                className="w-full pl-7 pr-3 py-1.5 text-xs bg-white/5 rounded-xl outline-none placeholder:text-zinc-600 text-white border border-white/8 focus:border-accent/40"
+                className="w-full pl-7 pr-3 py-1.5 text-xs bg-white/5 rounded-2xl outline-none placeholder:text-zinc-600 text-white border border-white/8 focus:border-accent/40"
               />
             </div>
 

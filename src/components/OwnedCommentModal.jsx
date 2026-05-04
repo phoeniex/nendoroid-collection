@@ -34,7 +34,7 @@ export function OwnedCommentModal({ nendo, currentComment, currentPrice, currenc
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 8 }}
           transition={{ duration: 0.18 }}
-          className="relative w-full max-w-sm p-5 flex flex-col gap-4 rounded-2xl border border-white/10"
+          className="relative w-full max-w-sm p-5 flex flex-col gap-4 rounded-xl border border-white/10"
           style={{ background: 'var(--color-bg-core)' }}
         >
           <div className="flex items-start justify-between gap-3">
