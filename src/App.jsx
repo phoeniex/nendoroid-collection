@@ -467,8 +467,12 @@ function App() {
         <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-10 h-16 flex items-start pt-4 justify-between gap-4">
           {/* Left — brand */}
           <div className="flex flex-col leading-none">
-            <span className="text-gradient font-black text-xl tracking-tight">Nendoroid Hub</span>
-            <span className="text-zinc-600 text-[10px] tracking-wide">by Solarizer</span>
+            <span className="text-gradient font-black text-xl tracking-tight">
+              Nendex
+            </span>
+            <span className="text-zinc-600 text-[10px] tracking-wide">
+              by Solarizer
+            </span>
           </div>
 
           {/* Right — theme + auth */}
@@ -536,10 +540,9 @@ function App() {
 
       {/* Full-width fixed search + filter banner — extends up to cover navbar */}
       <div className="fixed top-0 left-0 right-0 z-40 search-banner">
-        <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-10 py-3">
-          <div className="flex items-center gap-2">
-            {/* Search bar with chips */}
-            <div className="relative flex-1 search-input-container flex items-center gap-2 px-3 min-w-0">
+        <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-10 py-3 flex flex-col gap-2">
+          {/* Row 1 — search bar always full width */}
+          <div className="search-input-container flex items-center gap-2 px-3 min-w-0">
               <Search
                 className="text-zinc-500 shrink-0 transition-colors"
                 size={16}
@@ -600,7 +603,8 @@ function App() {
               )}
             </div>
 
-            {/* Filter dropdowns */}
+          {/* Row 2 — filters + tabs, horizontally scrollable on mobile */}
+          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
             <FilterDropdown
               label="Type"
               options={allTypes}
@@ -619,6 +623,8 @@ function App() {
               selected={filterSeries}
               onChange={setFilterSeries}
             />
+
+            <div className="w-px h-5 bg-white/10 shrink-0" />
 
             {/* Mode tabs */}
             <div className="relative flex items-center glass-panel p-1 gap-0.5 !rounded-xl shrink-0 h-10">
@@ -663,7 +669,7 @@ function App() {
         </div>
       </div>
 
-      <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-10 pt-20 pb-12">
+      <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-10 pt-32 pb-12">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
           <AnimatePresence>
             {visibleNendoroids.map((nendo) => (
