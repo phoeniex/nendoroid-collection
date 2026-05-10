@@ -39,6 +39,7 @@ import { useDominantColor } from "./hooks/useDominantColor";
 import { AuthModal } from "./components/AuthModal";
 import { FilterDropdown } from "./components/FilterDropdown";
 import { OwnedCommentModal } from "./components/OwnedCommentModal";
+import { VirtuosoGrid } from "react-virtuoso";
 
 const THEME_OPTIONS = [
   { value: "light", icon: <Sun size={14} /> },
@@ -46,7 +47,6 @@ const THEME_OPTIONS = [
   { value: "system", icon: <Monitor size={14} /> },
 ];
 
-const ITEMS_PER_PAGE = 60;
 const FILTER_LABELS = {
   all: "Everything",
   owned: "Collected",
@@ -306,7 +306,6 @@ function App() {
   const [filterType, setFilterType] = useState([]);
   const [filterYear, setFilterYear] = useState([]);
   const [filterSeries, setFilterSeries] = useState([]);
-  const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [dismissedSyncBanner, setDismissedSyncBanner] = useState(false);
@@ -314,7 +313,6 @@ function App() {
   const hasLocalData =
     !auth.user && Object.values(collection).some((v) => v.owned || v.favorited);
   const [commentTarget, setCommentTarget] = useState(null);
-  const sentinelRef = useRef(null);
 
   const [scrolled, setScrolled] = useState(false);
 
@@ -326,16 +324,6 @@ function App() {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  useEffect(() => {
-    setVisibleCount(ITEMS_PER_PAGE);
-  }, [
-    search,
-    filterMode,
-    filterType.join(","),
-    filterYear.join(","),
-    filterSeries.join(","),
-  ]);
 
   const numberedNendoroids = useMemo(
     () => nendoroidsData.filter((n) => n.number),
@@ -418,13 +406,6 @@ function App() {
     return searchMatched;
   }, [searchMatched, collection, filterMode]);
 
-  const visibleNendoroids = useMemo(
-    () => filteredNendoroids.slice(0, visibleCount),
-    [filteredNendoroids, visibleCount],
-  );
-
-  const hasMore = visibleCount < filteredNendoroids.length;
-
   const handleOwnWithComment = useCallback((nendo) => {
     setCommentTarget(nendo);
   }, []);
@@ -437,20 +418,6 @@ function App() {
     },
     [commentTarget, toggleOwned],
   );
-
-  const sentinelCallback = useCallback((el) => {
-    sentinelRef.current = el;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          setVisibleCount((prev) => prev + ITEMS_PER_PAGE);
-        }
-      },
-      { rootMargin: "400px" },
-    );
-    observer.observe(el);
-  }, []);
 
   if (auth.loading) {
     return (
@@ -670,9 +637,12 @@ function App() {
       </div>
 
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-10 pt-32 pb-12">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
-          <AnimatePresence>
-            {visibleNendoroids.map((nendo) => (
+        {filteredNendoroids.length > 0 && (
+          <VirtuosoGrid
+            useWindowScroll
+            data={filteredNendoroids}
+            listClassName="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4"
+            itemContent={(index, nendo) => (
               <NendoroidCard
                 key={nendo.id}
                 nendo={nendo}
@@ -684,14 +654,8 @@ function App() {
                 onToggleFavorited={toggleFavorited}
                 onOwnWithComment={handleOwnWithComment}
               />
-            ))}
-          </AnimatePresence>
-        </div>
-
-        {hasMore && (
-          <div ref={sentinelCallback} className="flex justify-center py-12">
-            <Loader size={24} className="animate-spin text-zinc-600" />
-          </div>
+            )}
+          />
         )}
 
         {filteredNendoroids.length === 0 && (
